@@ -1,0 +1,3 @@
+-- CREATE DATABASE IF NOT EXISTS nodejs_0_100
+SELECT 'CREATE DATABASE nodejs_0_100'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'nodejs_0_100')\gexec
