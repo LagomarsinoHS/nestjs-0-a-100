@@ -13,9 +13,10 @@ $ npm install
 
 ## Para correr la aplicacion
 
-1. Levantar docker `docker-compose up`
-2. Una vez se levante, revisar .env, debe tener `DB_HOST,DB_NAME,DB_PORT,DB_USER,DB_PASSWORD`
-3. 
+1. Levantar servicio Docker
+2. Levantar imagen docker `docker-compose up`
+3. Una vez se levante, revisar .env, debe tener `DB_HOST,DB_NAME,DB_PORT,DB_USER,DB_PASSWORD`
+4. 
 ```bash
 # development
 $ npm run start:dev
@@ -27,6 +28,8 @@ $ npm run start:dev
 * TypeOrm -> biblioteca que proporciona una capa de abstracción entre la base de datos y la aplicación
 * PG -> utilizar metodos de postgres en typeOrm
 * typeorm-naming-strategies -> Permite generar una estrategia, al crear una entidad, si lo hacemos con camelCase, en la BD se hará con snake_case
+* class-validator -> Permite usar decoradores de nest para validar los datos de entrada (DTO)
+* class-transformer -> Permite usar nest para transformar valores de entrada a otros de salida
 
 ## ENV
 
@@ -42,3 +45,14 @@ Si estás usando MAC deberás cambiar el script `start:dev` porque al setear NOD
 Para Mac: `export \"NODE_ENV=develop\" && nest start --watch`
 
 Para Windows: `set \"NODE_ENV=develop\" && nest start --watch`
+
+## Package.json
+
+Hay algunos scripts que estaremos utilizando en este projecto
+
+| Script | DESCIPTION |
+| ------ | ------ |
+| orm:init | Con este comando de typeOrm nosotros le pasamos la ubicacion del dataSource (para la conexion a la BD)
+| m:gen:dev | Generamos la migración 
+| m:run:dev | Corremos la migración
+
