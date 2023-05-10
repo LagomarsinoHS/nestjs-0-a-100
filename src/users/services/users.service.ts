@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from '../entities/users.entity';
-import { QueryBuilder, Repository } from 'typeorm';
-import { UserDto } from '../dto/user.dto';
+import { Repository } from 'typeorm';
+import { UserDTO } from '../dto/user.dto';
 import { ErrorManager } from 'src/utils/error.manager';
+import { UserProjectDTO } from '../dto/user-project.dto';
+import { UsersProjectsEntity } from '../entities/usersProjects.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly userRepo: Repository<UsersEntity>,
+    @InjectRepository(UsersProjectsEntity)
+    private readonly userProjectRepo: Repository<UsersProjectsEntity>,
   ) {}
 
   public async find(): Promise<UsersEntity[]> {
@@ -25,15 +30,44 @@ export class UsersService {
       return await this.userRepo
         .createQueryBuilder('user')
         .where({ id })
+        .leftJoinAndSelect('user.projectsIncludes', 'up')
+        .leftJoinAndSelect('up.project', 'upp')
         .getOne();
     } catch (error) {
       throw new ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async create(user: UserDto): Promise<UsersEntity> {
+  public async findBy({ key, value }: { key: keyof UserDTO; value: any }) {
     try {
+      return await this.userRepo
+        .createQueryBuilder('user')
+        .where({ [key]: value })
+        .leftJoinAndSelect('user.projectsIncludes', 'up')
+        .leftJoinAndSelect('up.project', 'upp')
+        .getOne();
+    } catch (error) {
+      throw new ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async create(user: UserDTO): Promise<UsersEntity> {
+    try {
+      const { password } = user;
+      const newPassword = await bcrypt.hash(password, +process.env.HASH_SALT);
+
+      user.password = newPassword;
       return this.userRepo.save(user);
+    } catch (error) {
+      throw new ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async createUP(
+    userProject: UserProjectDTO,
+  ): Promise<UsersProjectsEntity> {
+    try {
+      return this.userProjectRepo.save(userProject);
     } catch (error) {
       throw new ErrorManager.createSignatureError(error.message);
     }
@@ -41,8 +75,8 @@ export class UsersService {
 
   public async updateById(
     id: string,
-    user: Partial<UserDto>,
-  ): Promise<UserDto> {
+    user: Partial<UserDTO>,
+  ): Promise<UserDTO> {
     try {
       return (
         await this.userRepo

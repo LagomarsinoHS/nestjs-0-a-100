@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { ROLES } from 'src/constants';
 
-export class UserDto {
+export class UserDTO {
   @IsNotEmpty()
   @IsString()
   firstName: string;

@@ -8,7 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
-import { UserDto } from '../dto/user.dto';
+import { UserDTO } from '../dto/user.dto';
+import { UserProjectDTO } from '../dto/user-project.dto';
 
 @Controller('users')
 export class UsersController {
@@ -33,7 +34,7 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() user: UserDto) {
+  createUser(@Body() user: UserDTO) {
     try {
       return this.usersService.create(user);
     } catch (error) {
@@ -41,8 +42,17 @@ export class UsersController {
     }
   }
 
+  @Post('add-to-project')
+  addToProject(@Body() userProject: UserProjectDTO) {
+    try {
+      return this.usersService.createUP(userProject);
+    } catch (error) {
+      Logger.error(error);
+    }
+  }
+
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() user: Partial<UserDto>) {
+  updateUser(@Param('id') id: string, @Body() user: Partial<UserDTO>) {
     try {
       return this.usersService.updateById(id, user);
     } catch (error) {

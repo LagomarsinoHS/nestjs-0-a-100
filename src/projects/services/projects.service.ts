@@ -24,6 +24,8 @@ export class ProjectsService {
       return await this.projectRepo
         .createQueryBuilder('project')
         .where({ id })
+        .leftJoinAndSelect('project.usersIncludes', 'pu')
+        .leftJoinAndSelect('pu.user', 'user')
         .getOne();
     } catch (error) {
       throw new Error(error);
