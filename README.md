@@ -56,3 +56,16 @@ Hay algunos scripts que estaremos utilizando en este projecto
 | m:gen:dev | Generamos la migración 
 | m:run:dev | Corremos la migración
 
+# Migrations
+
+1. Primero hay que generar el m:gen para esto usamos el comando + el path
+
+
+        npm run m:gen -- src/migrations/init
+
+2. Si todo sale bien creará un archivo dentro de la carpeta migrations
+
+3. Terminamos con
+
+        
+        npm run m:run:dev
