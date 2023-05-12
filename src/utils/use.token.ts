@@ -8,7 +8,7 @@ export const useToken = (token: string): IUsedToken | string => {
     const decode = jwt.decode(token) as IAuthTokenResult;
 
     const currentDate = new Date().getTime();
-    const expiredDate = new Date(decode.exp).getTime();
+    const expiredDate = decode.exp * 1000;
     return {
       sub: decode.sub,
       role: decode.role,

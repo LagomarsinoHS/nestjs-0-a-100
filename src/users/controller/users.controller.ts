@@ -19,47 +19,48 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @PublicAccess()
   @Get()
-  findUsers() {
+  async findUsers() {
     try {
-      return this.usersService.find();
+      return await this.usersService.find();
     } catch (error) {
       Logger.error(error);
     }
   }
 
+  // Este decorador hace que no se me pida un token para generar la consulta
+  @PublicAccess()
   @Get(':id')
-  findUserById(@Param('id') id: string) {
+  async findUserById(@Param('id') id: string) {
     try {
-      return this.usersService.findById(id);
+      return await this.usersService.findById(id);
     } catch (error) {
       Logger.error(error);
     }
   }
 
   @Post()
-  createUser(@Body() user: UserDTO) {
+  async createUser(@Body() user: UserDTO) {
     try {
-      return this.usersService.create(user);
+      return await this.usersService.create(user);
     } catch (error) {
       Logger.error(error);
     }
   }
 
   @Post('add-to-project')
-  addToProject(@Body() userProject: UserProjectDTO) {
+  async addToProject(@Body() userProject: UserProjectDTO) {
     try {
-      return this.usersService.createUP(userProject);
+      return await this.usersService.createUP(userProject);
     } catch (error) {
       Logger.error(error);
     }
   }
 
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() user: Partial<UserDTO>) {
+  async updateUser(@Param('id') id: string, @Body() user: Partial<UserDTO>) {
     try {
-      return this.usersService.updateById(id, user);
+      return await this.usersService.updateById(id, user);
     } catch (error) {
       Logger.error(error);
     }
