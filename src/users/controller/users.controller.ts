@@ -19,6 +19,8 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // Este decorador hace que no se me pida un token para generar la consulta
+  @PublicAccess()
   @Get()
   async findUsers() {
     try {
@@ -28,8 +30,6 @@ export class UsersController {
     }
   }
 
-  // Este decorador hace que no se me pida un token para generar la consulta
-  @PublicAccess()
   @Get(':id')
   async findUserById(@Param('id') id: string) {
     try {
