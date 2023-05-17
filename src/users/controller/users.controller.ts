@@ -13,9 +13,13 @@ import { UserDTO } from '../dto/user.dto';
 import { UserProjectDTO } from '../dto/user-project.dto';
 import { PublicAccess } from 'src/auth/decorators/public.decorator';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { AdminAccess } from 'src/auth/decorators/admin.decorator';
+import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
 
 @Controller('users')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -30,6 +34,9 @@ export class UsersController {
     }
   }
 
+  
+  @Roles('BASIC')
+  //@AdminAccess()
   @Get(':id')
   async findUserById(@Param('id') id: string) {
     try {
