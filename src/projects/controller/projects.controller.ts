@@ -37,10 +37,10 @@ export class ProjectsController {
     }
   }
 
-  @Post()
-  createProject(@Body() project: ProjectDTO) {
+  @Post('/create/userOwner/:userId')
+  createProject(@Param('userId') userId: string, @Body() project: ProjectDTO) {
     try {
-      return this.projectsService.create(project);
+      return this.projectsService.create(userId, project);
     } catch (error) {
       Logger.error(error);
     }

@@ -34,8 +34,9 @@ export class UsersController {
     }
   }
 
-  
+  // Este decorador es para enviar los roles que tienen permiso para acceder a la ruta, dentro del guard asociado esta la logica
   @Roles('BASIC')
+  // Este decorador indica que solo puedes ser admin para acceder, tambien asociado al guard asociado a roles
   //@AdminAccess()
   @Get(':id')
   async findUserById(@Param('id') id: string) {

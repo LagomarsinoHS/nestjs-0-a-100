@@ -3,12 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectsEntity } from '../entities/projects.entity';
 import { Repository } from 'typeorm';
 import { ProjectDTO } from '../dto/project.dto';
+import { UsersProjectsEntity } from 'src/users/entities/usersProjects.entity';
+import { UsersService } from 'src/users/services/users.service';
+import { ACCESSLEVEL } from 'src/constants';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(ProjectsEntity)
     private readonly projectRepo: Repository<ProjectsEntity>,
+    @InjectRepository(UsersProjectsEntity)
+    private readonly userProjectRepo: Repository<UsersProjectsEntity>,
+    private readonly userService: UsersService,
   ) {}
 
   public async find(): Promise<ProjectsEntity[]> {
@@ -32,9 +38,19 @@ export class ProjectsService {
     }
   }
 
-  public async create(project: ProjectDTO): Promise<ProjectDTO> {
+  public async create(
+    userId: string,
+    project: ProjectDTO,
+  ): Promise<UsersProjectsEntity> {
     try {
-      return this.projectRepo.save(project);
+      const user = await this.userService.findById(userId);
+      const newProject = await this.projectRepo.save(project);
+
+      return await this.userProjectRepo.save({
+        accessLevel: ACCESSLEVEL.OWNER,
+        user: user,
+        project: newProject,
+      });
     } catch (error) {
       throw new Error(error);
     }
