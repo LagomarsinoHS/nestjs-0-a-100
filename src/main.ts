@@ -7,8 +7,9 @@ import {
   Logger,
   ValidationPipe,
 } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { snapshot: true });
 
   app.setGlobalPrefix('api/v1');
   const PORT = app.get(ConfigService).get('PORT') || 3000;
@@ -29,6 +30,17 @@ async function bootstrap() {
 
   const reflector = app.get(Reflector); //! Buscar que es esto
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+
+  // Swagger
+  const config = new DocumentBuilder()
+    .setTitle('API')
+    .setDescription('Task Application')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document); // {url}/api-docs
+
   await app.listen(PORT);
 
   Logger.log(

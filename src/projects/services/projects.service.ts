@@ -6,6 +6,7 @@ import { ProjectDTO } from '../dto/project.dto';
 import { UsersProjectsEntity } from 'src/users/entities/usersProjects.entity';
 import { UsersService } from 'src/users/services/users.service';
 import { ACCESSLEVEL } from 'src/constants';
+import { HttpCustomService } from 'src/providers/http/http.service';
 
 @Injectable()
 export class ProjectsService {
@@ -15,6 +16,7 @@ export class ProjectsService {
     @InjectRepository(UsersProjectsEntity)
     private readonly userProjectRepo: Repository<UsersProjectsEntity>,
     private readonly userService: UsersService,
+    private readonly httpService: HttpCustomService,
   ) {}
 
   public async find(): Promise<ProjectsEntity[]> {
@@ -73,6 +75,14 @@ export class ProjectsService {
       if (deletedProject.affected === 0) {
         throw 'No Project was deleted.';
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  public async listApi() {
+    try {
+      return this.httpService.apiFindAll();
     } catch (error) {
       throw new Error(error);
     }

@@ -30,6 +30,10 @@ $ npm run start:dev
 * typeorm-naming-strategies -> Permite generar una estrategia, al crear una entidad, si lo hacemos con camelCase, en la BD se hará con snake_case
 * class-validator -> Permite usar decoradores de nest para validar los datos de entrada (DTO)
 * class-transformer -> Permite usar nest para transformar valores de entrada a otros de salida
+* @nestjs/devtools-integration -> Permite usar la nueva feature de nest que es para monitorear mediante interfaz el proyecto
+* jsonwebtoken -> Permite utilizar metodos para generar token de auth
+* swagger -> Para crear documentación
+* @nestjs/axios -> axios, para utilizar http module y hacer consultas a otros endpoints
 
 ## ENV
 

@@ -13,8 +13,11 @@ import { ProjectDTO } from '../dto/project.dto';
 import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
 import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
 import { ACCESSLEVEL } from 'src/constants';
+import { ApiTags } from '@nestjs/swagger';
+import { PublicAccess } from 'src/auth/decorators/public.decorator';
 
 @Controller('projects')
+@ApiTags('Projects')
 @UseGuards(AccessLevelGuard)
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
@@ -23,6 +26,16 @@ export class ProjectsController {
   findProjects() {
     try {
       return this.projectsService.find();
+    } catch (error) {
+      Logger.error(error);
+    }
+  }
+
+  @PublicAccess()
+  @Get('/list-api')
+  async listApi() {
+    try {
+      return this.projectsService.listApi();
     } catch (error) {
       Logger.error(error);
     }

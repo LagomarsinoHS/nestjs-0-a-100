@@ -17,8 +17,10 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { AdminAccess } from 'src/auth/decorators/admin.decorator';
 import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('Users')
 @UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -39,6 +41,7 @@ export class UsersController {
   // Este decorador indica que solo puedes ser admin para acceder, tambien asociado al guard asociado a roles
   //@AdminAccess()
   @Get(':id')
+  @ApiParam({ name: 'id' })
   async findUserById(@Param('id') id: string) {
     try {
       return await this.usersService.findById(id);

@@ -23,11 +23,15 @@
     "m:run:dev": "export NODE_ENV=develop && npm run orm:init migration:run"
   },
   "dependencies": {
+    "@nestjs/axios": "^2.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/devtools-integration": "^0.1.4",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^6.3.0",
     "@nestjs/typeorm": "^9.0.1",
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "jsonwebtoken": "^9.0.0",
